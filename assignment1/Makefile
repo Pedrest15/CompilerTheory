@@ -5,6 +5,5 @@ run:
 	./lexical_analyzer
 
 clean:
-	rm lexical_analyzer *.o
-
+	rm lexical_analyzer
 
