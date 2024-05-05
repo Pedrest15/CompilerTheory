@@ -2,19 +2,15 @@
 #include <string.h>
 
 #include "open_close.h"
+#include "lexical_analyzer.h"
 
-void execute_lexical_analyzer(FILE* file){
-    char letter;
-    while ((letter = fgetc(file)) != EOF) {
-        // Exibe a letra lida
-        printf("Letra lida: %c\n", letter);
-    }
-}
+#define TRUE 1
+#define FALSE 0
 
 int main(){
-    char filename[100];
-    printf("Type the filename: ");
-    scanf("%s",filename);
+    char filename[100] = "teste.txt";
+    //printf("Type the filename: ");
+    //scanf("%s",filename);
 
     FILE* file = open_file(filename,FILE_READT);
     if (file == NULL){
@@ -22,7 +18,6 @@ int main(){
     }
 
     execute_lexical_analyzer(file);
-
 
     close_file(file);
     return 0;
