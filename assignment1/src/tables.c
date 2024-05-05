@@ -1,4 +1,4 @@
-#include "tables.h"
+#include "../header/tables.h"
 
 unsigned int hash_value(const char *token){
     unsigned int hash_value = 0;

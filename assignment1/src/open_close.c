@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "open_close.h"
+#include "../header/open_close.h"
 
 //abre um arquivo no modo desejado 
 FILE* open_file(char* filename, int mode){
@@ -13,8 +13,8 @@ FILE* open_file(char* filename, int mode){
             return NULL;
         }
 
-    } else if (mode == FILE_READWRITEB) {
-        file = fopen(filename, "rb+");
+    } else if (mode == FILE_WRITET) {
+        file = fopen(filename, "wt");
         if (file == NULL) {
             //error_file();
             return NULL;

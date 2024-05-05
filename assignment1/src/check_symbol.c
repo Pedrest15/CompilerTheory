@@ -1,4 +1,4 @@
-#include "check_symbol.h"
+#include "../header/check_symbol.h"
 
 int isLetter(char symbol){
     if ((symbol >= 'A' && symbol <= 'Z') ||

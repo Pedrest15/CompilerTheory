@@ -1,9 +1,9 @@
 #ifndef __CHECK_SYMBOLS_H__
 #define __CHECK_SYMBOLS_H__
 
-#include "tables.h"
-#include "states.h"
-#include "lexical_analyzer.h"
+#include "../header/tables.h"
+#include "../header/states.h"
+#include "../header/lexical_analyzer.h"
 
 #define TRUE 1
 #define FALSE 0

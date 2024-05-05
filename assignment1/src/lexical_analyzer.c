@@ -1,7 +1,60 @@
-#include "lexical_analyzer.h"
+#include "../header/lexical_analyzer.h"
 
-void backtrack(FILE* file){
-    fseek(file, -1, SEEK_CUR);
+int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+                State current_state, char symbol, char* buffer){
+    switch (current_state){
+        case DONE_KEYWORD:
+            if (symbol != EOF){
+                backtrack(file);
+            }
+            buffer[strlen(buffer)] = '\0';
+            if (search_token(&keywords,buffer)){
+                write_token(foutput,buffer,get_token_class(&keywords,buffer));
+                printf("%s, %s\n", buffer,get_token_class(&keywords,buffer));
+            } else {
+                write_token(foutput,buffer,"ident");
+                printf("%s, id\n", buffer);
+            }
+            
+            return TRUE;
+
+        case DONE_KEYSYMBOL:
+            if (symbol != EOF){
+                backtrack(file);
+            }
+            buffer[strlen(buffer)] = '\0';
+            if (search_token(&keysymbols,buffer)){
+                write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
+            } else {
+                printf("lascou\n");
+            }
+            
+            return TRUE;
+
+        case DONE_IDENTIFIER:
+            if (symbol != EOF){
+                backtrack(file);
+            }
+            buffer[strlen(buffer)] = '\0';
+            write_token(foutput,buffer,"ident");
+            printf("%s, id\n", buffer);
+            return TRUE;
+
+        case DONE_NUMBER:
+            if (symbol != EOF){
+                backtrack(file);
+            }
+            buffer[strlen(buffer)] = '\0';
+            write_token(foutput,buffer,"numero");
+            printf("%s, num\n", buffer);
+
+        case DONE_COMMENT:
+            return TRUE;
+        
+        default:
+            return FALSE;
+    }
 }
 
 State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,State current_state, char symbol, char* buffer){
@@ -82,58 +135,7 @@ State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,Stat
     }
 }
 
-int final_states(FILE* file,HashTable keywords, HashTable keysymbols,State current_state,char symbol,char* buffer){
-    switch (current_state){
-        case DONE_KEYWORD:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            if (search_token(&keywords,buffer)){
-                printf("%s, %s\n", buffer,get_token_class(&keywords,buffer));
-            } else {
-                printf("%s, id\n", buffer);
-            }
-            
-            return TRUE;
-
-        case DONE_KEYSYMBOL:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            if (search_token(&keysymbols,buffer)){
-                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
-            } else {
-                printf("lascou\n", buffer);
-            }
-            
-            return TRUE;
-
-        case DONE_IDENTIFIER:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            printf("%s, id\n", buffer);
-            return TRUE;
-
-        case DONE_NUMBER:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            printf("%s, num\n", buffer);
-
-        case DONE_COMMENT:
-            return TRUE;
-        
-        default:
-            return FALSE;
-    }
-}
-
-int lexical_analyzer(FILE* file, HashTable keywords, HashTable keysymbols){
+int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
     State current_state = START;
     char symbol;
     char buffer[100] = "";
@@ -142,7 +144,7 @@ int lexical_analyzer(FILE* file, HashTable keywords, HashTable keysymbols){
         symbol = fgetc(file);
         
         current_state = transition_rules(file,keywords,keysymbols,current_state,symbol,buffer);
-        if(final_states(file,keywords,keysymbols,current_state,symbol,buffer)){
+        if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
         }
     
@@ -154,8 +156,8 @@ int lexical_analyzer(FILE* file, HashTable keywords, HashTable keysymbols){
     return symbol;
 }
 
-void execute_lexical_analyzer(FILE* file){
+void execute_lexical_analyzer(FILE* file, FILE* foutput){
     HashTable keywords = make_KeyWords();
     HashTable keysymbols = make_KeySymbols();
-    while (lexical_analyzer(file,keywords,keysymbols) != EOF);
+    while (lexical_analyzer(file,foutput,keywords,keysymbols) != EOF);
 }
