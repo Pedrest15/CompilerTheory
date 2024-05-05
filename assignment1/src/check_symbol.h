@@ -14,5 +14,6 @@ int isSpace(char symbol);
 int isNewLine(char symbol);
 int isOperator(HashTable operators,char symbol);
 int isComment(State current_state,char symbol);
+int isSeparator(HashTable keysymbols, State current_state, char symbol);
 
 #endif

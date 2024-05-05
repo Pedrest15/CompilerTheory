@@ -4,10 +4,14 @@
 typedef enum {
     START,
     KEYWORD,
+    KEYSYMBOL,
     IDENTIFIER,
+    NUMBER,
     COMMENT,
     DONE_KEYWORD,
+    DONE_KEYSYMBOL,
     DONE_IDENTIFIER,
+    DONE_NUMBER,
     DONE_COMMENT
 } State;
 

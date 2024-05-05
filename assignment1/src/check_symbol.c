@@ -29,16 +29,6 @@ int isNewLine(char symbol){
     return FALSE;
 }
 
-int isOperator(HashTable operators,char symbol){
-    char word[2];
-    word[0] = symbol;
-    word[1] = '\0';
-    if (search_word(&operators,word)){
-        return TRUE;
-    }
-    return FALSE;
-}
-
 int isComment(State current_state, char symbol){
     if (current_state == START && symbol == '{'){
         return TRUE;
@@ -47,3 +37,29 @@ int isComment(State current_state, char symbol){
     }
     return FALSE;
 }
+
+int isKeySymbol(char symbol){
+    if (symbol == '+' ||
+        symbol == '-' ||
+        symbol == '/' ||
+        symbol == '*' ||
+        symbol == ':' ||
+        symbol == '=' ||
+        symbol == '>' ||
+        symbol == '<' ||
+        symbol == ',' ||
+        symbol == ';' ||
+        symbol == '.'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isSeparator(HashTable keysymbols, State current_state, char symbol){
+    if(isSpace(symbol) || isNewLine(symbol) || isKeySymbol(symbol) || 
+                        isComment(current_state, symbol) || symbol == EOF){
+        return TRUE;
+    }
+    return FALSE;
+}
+

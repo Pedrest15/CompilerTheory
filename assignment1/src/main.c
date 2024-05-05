@@ -8,7 +8,7 @@
 #define FALSE 0
 
 int main(){
-    char filename[100] = "teste.txt";
+    char filename[100] = "program.txt";
     //printf("Type the filename: ");
     //scanf("%s",filename);
 

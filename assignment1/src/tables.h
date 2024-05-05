@@ -4,10 +4,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define HASH_SIZE 11
+#define HASH_SIZE 17
 
 typedef struct Node {
-    char word[20];
+    char token[20];
+    char token_class[25];
     struct Node *next;
 } Node;
 
@@ -16,10 +17,9 @@ typedef struct HashTable {
     Node *table[HASH_SIZE];
 } HashTable;
 
-unsigned int hash_value(const char *word);
-void insert_word(HashTable *hash_table, const char *word);
-int search_word(HashTable *hash_table, const char *word);
+int search_token(HashTable *hash_table, const char *token);
+char* get_token_class(HashTable *hash_table, const char *token);
 HashTable make_KeyWords();
-HashTable make_operators();
+HashTable make_KeySymbols();
 
 #endif
