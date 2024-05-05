@@ -1,70 +1,13 @@
 #include "../header/lexical_analyzer.h"
 
-int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
-                State current_state, char symbol, char* buffer){
-    switch (current_state){
-        case DONE_KEYWORD:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            if (search_token(&keywords,buffer)){
-                write_token(foutput,buffer,get_token_class(&keywords,buffer));
-                printf("%s, %s\n", buffer,get_token_class(&keywords,buffer));
-            } else {
-                write_token(foutput,buffer,"ident");
-                printf("%s, id\n", buffer);
-            }
-            
-            return TRUE;
-
-        case DONE_KEYSYMBOL:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            if (search_token(&keysymbols,buffer)){
-                write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
-                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
-            } else {
-                printf("lascou\n");
-            }
-            
-            return TRUE;
-
-        case DONE_IDENTIFIER:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            write_token(foutput,buffer,"ident");
-            printf("%s, id\n", buffer);
-            return TRUE;
-
-        case DONE_NUMBER:
-            if (symbol != EOF){
-                backtrack(file);
-            }
-            buffer[strlen(buffer)] = '\0';
-            write_token(foutput,buffer,"numero");
-            printf("%s, num\n", buffer);
-
-        case DONE_COMMENT:
-            return TRUE;
-        
-        default:
-            return FALSE;
-    }
-}
-
-State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,State current_state, char symbol, char* buffer){
+State transition_rules(FILE* file,State current_state, char symbol, char* buffer){
     switch(current_state){
         case START:
             if (isLetter(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
-            } else if(isKeySymbol(keysymbols,symbol)){
+            } else if(isKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYSYMBOL;
 
@@ -87,7 +30,7 @@ State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,Stat
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
             
-            } else if (isSeparator(keysymbols,current_state,symbol)){
+            } else if (isSeparator(current_state,symbol)){
                 return DONE_KEYWORD;
             }
             break;
@@ -109,7 +52,7 @@ State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,Stat
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
             
-            } else if (isSeparator(keysymbols,current_state,symbol)){
+            } else if (isSeparator(current_state,symbol)){
                 return DONE_IDENTIFIER;
             }
             break;
@@ -122,7 +65,7 @@ State transition_rules(FILE* file, HashTable keywords, HashTable keysymbols,Stat
                 buffer[strlen(buffer)] = symbol;
                 return NUMBER;
             
-            } else if (isSeparator(keysymbols,current_state,symbol)){
+            } else if (isSeparator(current_state,symbol)){
                 return DONE_NUMBER;
             }
 
@@ -143,7 +86,7 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     while (1) {
         symbol = fgetc(file);
         
-        current_state = transition_rules(file,keywords,keysymbols,current_state,symbol,buffer);
+        current_state = transition_rules(file,current_state,symbol,buffer);
         if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
         }

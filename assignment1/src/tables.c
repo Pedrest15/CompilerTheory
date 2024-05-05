@@ -1,5 +1,11 @@
 #include "../header/tables.h"
 
+/**
+ * @brief calcula o valor do indice hash para futura insercao
+ * 
+ * @param token recebera seu indice para a tabela
+ * @return int indice do token
+ */
 unsigned int hash_value(const char *token){
     unsigned int hash_value = 0;
     while (*token) {
@@ -8,6 +14,14 @@ unsigned int hash_value(const char *token){
     return hash_value % HASH_SIZE;
 }
 
+/**
+ * @brief Insere um token e sua classe na tabela hash
+ * 
+ * @param hash_table estrutura de dados usada
+ * @param token serah inserido
+ * @param token_class classe do token, tambem sera inserida
+ * @return int retorna se a função foi concluida com sucesso ou nao 
+ */
 void insert_token(HashTable *hash_table, char* token, char* token_class){
     unsigned int index = hash_value(token);
     Node *new_node = (Node *)malloc(sizeof(Node));
@@ -17,6 +31,8 @@ void insert_token(HashTable *hash_table, char* token, char* token_class){
     }
     strcpy(new_node->token, token);
     strcpy(new_node->token_class, token_class);
+    
+    //insere o novo token e sua classe na tabela, ligando esse novo no ao restante
     new_node->next = hash_table->table[index];
     hash_table->table[index] = new_node;
 }

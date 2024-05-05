@@ -4,15 +4,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Uma tabela hash costuma ter um numero impar como tamanho
 #define HASH_SIZE 17
 
+// Estrutura de cada no da tabela hash
 typedef struct Node {
     char token[20];
     char token_class[25];
     struct Node *next;
 } Node;
 
-// Estrutura da tabela de dispersão
+// Estrutura da tabela hash
 typedef struct HashTable {
     Node *table[HASH_SIZE];
 } HashTable;
