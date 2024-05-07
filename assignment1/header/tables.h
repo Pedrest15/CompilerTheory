@@ -10,7 +10,7 @@
 // Estrutura de cada no da tabela hash
 typedef struct Node {
     char token[20];
-    char token_class[25];
+    char token_class[30];
     struct Node *next;
 } Node;
 

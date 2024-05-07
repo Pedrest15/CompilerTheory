@@ -18,6 +18,9 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             } else if(isComment(current_state,symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return COMMENT;
+            } else {
+                //caracter invalido
+                //ERRO
             }
             break;
 
@@ -32,6 +35,9 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             
             } else if (isSeparator(current_state,symbol)){
                 return DONE_KEYWORD;
+            } else {
+                //caracter invalido
+                //ERRO
             }
             break;
 
@@ -39,6 +45,7 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             if (isKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYSYMBOL;
+                
             } else {
                 return DONE_KEYSYMBOL;
             }
@@ -54,6 +61,10 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             
             } else if (isSeparator(current_state,symbol)){
                 return DONE_IDENTIFIER;
+
+            } else {
+                //caracter invalido
+                //ERRO
             }
             break;
 
@@ -67,6 +78,10 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             
             } else if (isSeparator(current_state,symbol)){
                 return DONE_NUMBER;
+
+            } else {
+                //caracter invalido
+                //ERRO
             }
 
         case COMMENT:

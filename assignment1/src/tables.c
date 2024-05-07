@@ -92,7 +92,7 @@ HashTable make_KeySymbols(){
     insert_token(&hash_table, "/", "simbolo_divisao");
     insert_token(&hash_table, "*", "simbolo_multiplicacao");
     insert_token(&hash_table, ":=", "simbolo_atribuicao");
-    insert_token(&hash_table, "<>", "simbolo_diferente");
+    insert_token(&hash_table, "<>", "simbolo_diferente_de");
     insert_token(&hash_table, ">", "simbolo_maior");
     insert_token(&hash_table, "<", "simbolo_menor");
     insert_token(&hash_table, ">=", "simbolo_maior_igual");
@@ -100,6 +100,8 @@ HashTable make_KeySymbols(){
     insert_token(&hash_table, ",", "simbolo_virgula");
     insert_token(&hash_table, ".", "simbolo_ponto");
     insert_token(&hash_table, ";", "simbolo_ponto_virgula");
+    insert_token(&hash_table, "(", "simbolo_parentese_esquerda");
+    insert_token(&hash_table, ")", "simbolo_parentese_direita");
 
     return hash_table;
 }

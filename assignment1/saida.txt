@@ -16,7 +16,7 @@ b,ident
 ;,simbolo_ponto_virgula
 c,ident
 :=,simbolo_atribuicao
-+,simbolo_mais
+2,numero
 b,ident
 END,END
 .,simbolo_ponto

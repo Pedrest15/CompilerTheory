@@ -53,7 +53,7 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
                 printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
             } else {
                 //erro
-                printf("lascou\n");
+                printf("%s, %s\n", buffer,"YUDAO, ERRO AQUI");;
             }
             
             return TRUE;
