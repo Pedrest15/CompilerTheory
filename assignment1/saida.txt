@@ -16,7 +16,9 @@ b,ident
 ;,simbolo_ponto_virgula
 c,ident
 :=,simbolo_atribuicao
+=,simbolo_comparacao
 2,numero
++,simbolo_mais
 b,ident
 END,END
 .,simbolo_ponto

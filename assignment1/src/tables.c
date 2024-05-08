@@ -91,6 +91,7 @@ HashTable make_KeySymbols(){
     insert_token(&hash_table, "-", "simbolo_menos");
     insert_token(&hash_table, "/", "simbolo_divisao");
     insert_token(&hash_table, "*", "simbolo_multiplicacao");
+    insert_token(&hash_table, "=", "simbolo_comparacao");
     insert_token(&hash_table, ":=", "simbolo_atribuicao");
     insert_token(&hash_table, "<>", "simbolo_diferente_de");
     insert_token(&hash_table, ">", "simbolo_maior");

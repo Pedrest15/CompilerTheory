@@ -7,9 +7,21 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
-            } else if(isKeySymbol(symbol)){
+            } else if(isSimpleKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
-                return KEYSYMBOL;
+                return DONE_KEYSYMBOL;
+
+            } else if(isDoubleDotsKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return DOUBLE_DOTS_KEYSYMBOL;
+
+            } else if(isLowerKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return LOWER_KEYSYMBOL;
+
+            } else if(isBiggerKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return BIGGER_KEYSYMBOL;
 
             } else if(isDigit(symbol)){
                 buffer[strlen(buffer)] = symbol;
@@ -18,6 +30,12 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             } else if(isComment(current_state,symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return COMMENT;
+
+            // caso o automato inicie com espaco ou quebra de linha
+            } else if(isSpace(symbol) || isNewLine(symbol)){
+                return START;
+
+            // caracteres invalidos
             } else {
                 //caracter invalido
                 //ERRO
@@ -41,14 +59,44 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             }
             break;
 
-        case KEYSYMBOL:
-            if (isKeySymbol(symbol)){
+        case DOUBLE_DOTS_KEYSYMBOL:
+            // buffer fica com simbolo ':='
+            if (isEqualKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
-                return KEYSYMBOL;
+                return DONE_KEYSYMBOL;
                 
             } else {
                 return DONE_KEYSYMBOL;
             }
+            break;
+
+        case LOWER_KEYSYMBOL:
+            // buffer fica com simbolo '<='
+            if (isEqualKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return DONE_KEYSYMBOL;
+            
+            // buffer fica com simbolo '<>'
+            } else if (isBiggerKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return DONE_KEYSYMBOL;    
+            
+            } else {
+                return DONE_KEYSYMBOL;
+            }
+            break;
+
+        case BIGGER_KEYSYMBOL:
+            // buffer fica com simbolo '>='
+            if (isEqualKeySymbol(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return DONE_KEYSYMBOL;
+                
+            //buffer apenas com '>'
+            } else {
+                return DONE_KEYSYMBOL;
+            }
+            break;
 
         case IDENTIFIER:
             if (isLetter(symbol)){
@@ -83,6 +131,7 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
                 //caracter invalido
                 //ERRO
             }
+            break;
 
         case COMMENT:
             if (isComment(current_state,symbol)){
@@ -90,6 +139,7 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             } else {
                 return COMMENT;
             }
+            break;
     }
 }
 

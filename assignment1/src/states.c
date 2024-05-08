@@ -39,13 +39,12 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
         case DONE_KEYSYMBOL:
             //retroceder um caracter
-            if (symbol != EOF){
+            /*if (symbol != EOF){
                 backtrack(file);
-            }
+            }*/
 
             //coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
-
             //confere se buffer contem um simbolo reservado
             if (search_token(&keysymbols,buffer)){
                 //escreve o token e sua classe no arquivo de saida

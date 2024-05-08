@@ -75,19 +75,50 @@ int isComment(State current_state, char symbol){
  * @param symbol caracter a ser analisado
  * @return int retorna se a função foi concluida com sucesso ou nao
  */
-int isKeySymbol(char symbol){
+int isSimpleKeySymbol(char symbol){
     // Listando todos os simbolos reservados
-    if (symbol == '+' ||
+    if (symbol == '=' ||
+        symbol == '+' ||
         symbol == '-' ||
         symbol == '/' ||
         symbol == '*' ||
-        symbol == ':' ||
-        symbol == '=' ||
-        symbol == '>' ||
-        symbol == '<' ||
         symbol == ',' ||
         symbol == ';' ||
-        symbol == '.'){
+        symbol == '.' ||
+        symbol == '(' ||
+        symbol == ')'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isDoubleDotsKeySymbol(char symbol){
+    // Listando todos os simbolos reservados
+    if (symbol == ':'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isEqualKeySymbol(char symbol){
+    // Listando todos os simbolos reservados
+    if (symbol == '='){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isBiggerKeySymbol(char symbol){
+    // Listando todos os simbolos reservados
+    if (symbol == '>'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isLowerKeySymbol(char symbol){
+    // Listando todos os simbolos reservados
+    if (symbol == '<'){
         return TRUE;
     }
     return FALSE;
@@ -101,8 +132,14 @@ int isKeySymbol(char symbol){
  * @return int retorna se a função foi concluida com sucesso ou nao
  */
 int isSeparator(State current_state, char symbol){
-    if(isSpace(symbol) || isNewLine(symbol) || isKeySymbol(symbol) || 
-                        isComment(current_state, symbol) || symbol == EOF){
+    if( isSpace(symbol) ||
+        isNewLine(symbol) ||
+        isSimpleKeySymbol(symbol) ||
+        isDoubleDotsKeySymbol(symbol) ||
+        isLowerKeySymbol(symbol) ||
+        isBiggerKeySymbol(symbol) ||
+        isComment(current_state, symbol) ||
+        symbol == EOF){
         return TRUE;
     }
     return FALSE;
