@@ -23,7 +23,8 @@ typedef enum {
     DONE_KEYSYMBOL,
     DONE_IDENTIFIER,
     DONE_NUMBER,
-    DONE_COMMENT
+    DONE_COMMENT,
+    ERROR
 } State;
 
 int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,

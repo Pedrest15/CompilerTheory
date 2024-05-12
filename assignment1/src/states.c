@@ -38,24 +38,25 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             return TRUE;
 
         case DONE_KEYSYMBOL:
-            //retroceder um caracter
-            /*if (symbol != EOF){
-                backtrack(file);
-            }*/
-
-            //coloca \0 no buffer para escrever no arquivo sem problemas
+            // Coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
-            //confere se buffer contem um simbolo reservado
-            if (search_token(&keysymbols,buffer)){
-                //escreve o token e sua classe no arquivo de saida
-                write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
-                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
+
+            // Confere se buffer contém um símbolo reservado
+            if (search_token(&keysymbols, buffer)) {
+                // Escreve o token e sua classe no arquivo de saída
+                // write_token(foutput, buffer, get_token_class(&keysymbols, buffer));
+                // printf("%s, %s\n", buffer, get_token_class(&keysymbols, buffer));
             } else {
-                //erro
-                printf("%s, %s\n", buffer,"YUDAO, ERRO AQUI");;
+                // Erro apenas se o buffer não estiver vazio
+                if (strlen(buffer) > 0) {
+                    printf("%s, ERRO: Caractere Inválido!\n", buffer);
+                    printf("%c, erro lexico\n", symbol);
+
+                }
             }
-            
+
             return TRUE;
+
 
         case DONE_IDENTIFIER:
             //retroceder um caracter
@@ -87,7 +88,9 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
         case DONE_COMMENT:
             //comentarios sao ignorados para o arquivo de saida
             return TRUE;
-        
+        case ERROR:
+            return TRUE;
+
         default:
             //caso o estado atual nao seja um estado final
             return FALSE;

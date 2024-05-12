@@ -1,7 +1,7 @@
 VAR a,b,c;
 
 BEGIN
-    a:=2;
+    a:=2a;
     b:=3;
-    c:=2 + b
+    c:@ + b
 END.

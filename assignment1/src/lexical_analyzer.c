@@ -1,6 +1,6 @@
 #include "../header/lexical_analyzer.h"
 
-State transition_rules(FILE* file,State current_state, char symbol, char* buffer){
+State transition_rules(FILE* file,FILE* foutput, State current_state, char symbol, char* buffer){
     switch(current_state){
         case START:
             if (isLetter(symbol)){
@@ -37,12 +37,14 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
 
             // caracteres invalidos
             } else {
-                //caracter invalido
-                //ERRO
+                //ERRADO: printando no final do codigo
+                //printf("%c, erro léxico\n", symbol); // Imprime o caractere especial
+                return ERROR; // Volta ao estado inicial após o erro
             }
             break;
 
         case KEYWORD:
+            // palavras reservadas
             if (isLetter(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
@@ -54,6 +56,7 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
             } else if (isSeparator(current_state,symbol)){
                 return DONE_KEYWORD;
             } else {
+
                 //caracter invalido
                 //ERRO
             }
@@ -111,6 +114,9 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
                 return DONE_IDENTIFIER;
 
             } else {
+                //nao pode numero com letra
+                printf("%c, erro lexico \n", symbol);
+                return ERROR;
                 //caracter invalido
                 //ERRO
             }
@@ -118,7 +124,9 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
 
         case NUMBER:
             if (isLetter(symbol)){
-                //erro
+                printf("%c, erro lexico. O caractere inserido foi uma letra! Insira numeros \n", symbol);
+                return ERROR;
+
 
             } else if (isDigit(symbol)){
                 buffer[strlen(buffer)] = symbol;
@@ -128,8 +136,8 @@ State transition_rules(FILE* file,State current_state, char symbol, char* buffer
                 return DONE_NUMBER;
 
             } else {
-                //caracter invalido
-                //ERRO
+                printf("%c, erro lexico. O caractere inserido foi um simbolo! Insira numeros \n", symbol);
+                return ERROR;
             }
             break;
 
@@ -151,7 +159,7 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     while (1) {
         symbol = fgetc(file);
         
-        current_state = transition_rules(file,current_state,symbol,buffer);
+        current_state = transition_rules(file,foutput, current_state,symbol,buffer);
         if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
         }
