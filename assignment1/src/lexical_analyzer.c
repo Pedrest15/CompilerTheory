@@ -1,6 +1,6 @@
 #include "../header/lexical_analyzer.h"
 
-State transition_rules(FILE* file,FILE* foutput, State current_state, char symbol, char* buffer){
+State transition_rules(FILE* file, State current_state, char symbol, char* buffer){
     switch(current_state){
         case START:
             if (isLetter(symbol)){
@@ -159,7 +159,7 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     while (1) {
         symbol = fgetc(file);
         
-        current_state = transition_rules(file,foutput, current_state,symbol,buffer);
+        current_state = transition_rules(file, current_state,symbol,buffer);
         if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
         }

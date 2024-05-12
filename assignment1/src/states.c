@@ -44,8 +44,8 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             // Confere se buffer contém um símbolo reservado
             if (search_token(&keysymbols, buffer)) {
                 // Escreve o token e sua classe no arquivo de saída
-                // write_token(foutput, buffer, get_token_class(&keysymbols, buffer));
-                // printf("%s, %s\n", buffer, get_token_class(&keysymbols, buffer));
+                write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
             } else {
                 // Erro apenas se o buffer não estiver vazio
                 if (strlen(buffer) > 0) {
