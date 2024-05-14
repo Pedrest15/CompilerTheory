@@ -7,6 +7,10 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
+            } else if (isUnderScore(symbol)){
+                buffer[strlen(buffer)] = symbol;
+                return IDENTIFIER;
+
             } else if(isSimpleKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
@@ -31,34 +35,39 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 buffer[strlen(buffer)] = symbol;
                 return COMMENT;
 
-            // caso o automato inicie com espaco ou quebra de linha
+            // caso a fita do automato inicie com espaco ou quebra de linha
             } else if(isSpace(symbol) || isNewLine(symbol)){
                 return START;
 
+            // caso de EOF, ignorado pelo automato
+            } else if(symbol == EOF){
+                break;
+
             // caracteres invalidos
             } else {
-                //ERRADO: printando no final do codigo
-                //printf("%c, erro léxico\n", symbol); // Imprime o caractere especial
-                return ERROR; // Volta ao estado inicial após o erro
+                buffer[strlen(buffer)] = symbol;
+                return ERROR_INVALID_SYMBOL; // Volta ao estado inicial após o erro
             }
             break;
 
         case KEYWORD:
-            // palavras reservadas
+            // enquanto forem letras, pode ser uma palavra reservada
             if (isLetter(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
-            } else if (isDigit(symbol)){
+            // se houver digito ou _, entao eh um identificador
+            } else if (isDigit(symbol) || isUnderScore(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
             
             } else if (isSeparator(current_state,symbol)){
                 return DONE_KEYWORD;
+            
+            //carcter invalido no nome
             } else {
-
-                //caracter invalido
-                //ERRO
+                buffer[strlen(buffer)] = symbol;
+                return ERROR_INVALID_IDENTIFIER;
             }
             break;
 
@@ -68,8 +77,9 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
                 
+            // faltando '='
             } else {
-                return DONE_KEYSYMBOL;
+                return ERROR_DOUBLE_DOTS;
             }
             break;
 
@@ -106,27 +116,25 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
 
-            } else if (isDigit(symbol)){
+            } else if (isDigit(symbol) || isUnderScore(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
             
             } else if (isSeparator(current_state,symbol)){
                 return DONE_IDENTIFIER;
 
+            //carcter invalido no nome
             } else {
-                //nao pode numero com letra
-                printf("%c, erro lexico \n", symbol);
-                return ERROR;
-                //caracter invalido
-                //ERRO
+                buffer[strlen(buffer)] = symbol;
+                return ERROR_INVALID_IDENTIFIER;
             }
             break;
 
         case NUMBER:
+            //numero seguido por letra
             if (isLetter(symbol)){
-                printf("%c, erro lexico. O caractere inserido foi uma letra! Insira numeros \n", symbol);
-                return ERROR;
-
+                buffer[strlen(buffer)] = symbol;
+                return ERROR_NUMBER_LETTER;
 
             } else if (isDigit(symbol)){
                 buffer[strlen(buffer)] = symbol;
@@ -135,9 +143,10 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             } else if (isSeparator(current_state,symbol)){
                 return DONE_NUMBER;
 
+            //carcter invalido no numero
             } else {
-                printf("%c, erro lexico. O caractere inserido foi um simbolo! Insira numeros \n", symbol);
-                return ERROR;
+                buffer[strlen(buffer)] = symbol;
+                return ERROR_INVALID_NUMBER;
             }
             break;
 
@@ -148,7 +157,11 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return COMMENT;
             }
             break;
+
+        default:
+            break;
     }
+    return START;
 }
 
 int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
@@ -161,6 +174,8 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
         
         current_state = transition_rules(file, current_state,symbol,buffer);
         if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
+            break;
+        } else if(error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
         }
     

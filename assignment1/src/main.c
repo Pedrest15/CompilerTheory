@@ -21,6 +21,7 @@ int main(){
     // inicia o analisador lexico
     execute_lexical_analyzer(file,foutput);
 
+    //fecha os arquivos usados
     close_file(file);
     close_file(foutput);
     

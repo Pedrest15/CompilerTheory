@@ -76,7 +76,6 @@ int isComment(State current_state, char symbol){
  * @return int retorna se a função foi concluida com sucesso ou nao
  */
 int isSimpleKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '=' ||
         symbol == '+' ||
         symbol == '-' ||
@@ -93,7 +92,6 @@ int isSimpleKeySymbol(char symbol){
 }
 
 int isDoubleDotsKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == ':'){
         return TRUE;
     }
@@ -101,7 +99,6 @@ int isDoubleDotsKeySymbol(char symbol){
 }
 
 int isEqualKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '='){
         return TRUE;
     }
@@ -109,7 +106,6 @@ int isEqualKeySymbol(char symbol){
 }
 
 int isBiggerKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '>'){
         return TRUE;
     }
@@ -117,8 +113,14 @@ int isBiggerKeySymbol(char symbol){
 }
 
 int isLowerKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '<'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int isUnderScore(char symbol){
+    if (symbol == '_'){
         return TRUE;
     }
     return FALSE;
@@ -139,6 +141,7 @@ int isSeparator(State current_state, char symbol){
         isLowerKeySymbol(symbol) ||
         isBiggerKeySymbol(symbol) ||
         isComment(current_state, symbol) ||
+        isEqualKeySymbol(symbol) ||
         symbol == EOF){
         return TRUE;
     }
