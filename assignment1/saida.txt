@@ -6,11 +6,13 @@ b,ident
 ____c,ident
 ;,simbolo_ponto_virgula
 BEGIN,BEGIN
-a@,ERRO LEXICO => nome de identificador com caracter invalido
-:=,simbolo_atribuicao
-1@,ERRO LEXICO => numero com caracter invalido
+a,ident
+:,ERRO LEXICO => faltando '=' a direita
+@,ERRO LEXICO => caracter invalido
++,simbolo_mais
+1,numero
 ;,simbolo_ponto_virgula
-b,ident
+b},ERRO LEXICO => nome de identificador com caracter invalido
 :=,simbolo_atribuicao
 3a,ERRO LEXICO => numero seguido por letra
 a,ident
