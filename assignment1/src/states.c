@@ -81,6 +81,21 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
     }
 }
 
+/**
+ * Função que lida com os estados de erro do autômato finito determinístico (AFD).
+ * Esta função executa as operações apropriadas quando o analisador léxico
+ * encontra um estado de erro.
+ *
+ * @param file Arquivo de entrada contendo o programa em processo de compilação.
+ * @param foutput Arquivo de saída do analisador léxico, contendo os tokens e suas classes.
+ * @param keywords Tabela com as palavras reservadas da linguagem.
+ * @param keysymbols Tabela com os símbolos reservados da linguagem.
+ * @param current_state Estado atual da máquina de Moore.
+ * @param symbol Último caractere lido na fita.
+ * @param buffer Cadeia lida até o momento, do estado inicial até chegar a um estado final.
+ * @return Retorna verdadeiro se o estado atual for um estado de erro, caso contrário, retorna falso.
+ */
+
 int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer){
     switch (current_state){

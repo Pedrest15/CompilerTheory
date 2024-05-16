@@ -102,12 +102,26 @@ int isSimpleKeySymbol(char symbol){
     return FALSE;
 }
 
+/**
+ * @brief Verifica se o caractere é ':'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for ':', senão retorna FALSE.
+ */
+
 int isDoubleDotsKeySymbol(char symbol){
     if (symbol == ':'){
         return TRUE;
     }
     return FALSE;
 }
+
+/**
+ * @brief Verifica se o caractere é '='.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for '=', senão retorna FALSE.
+ */
 
 int isEqualKeySymbol(char symbol){
     if (symbol == '='){
@@ -116,6 +130,14 @@ int isEqualKeySymbol(char symbol){
     return FALSE;
 }
 
+
+/**
+ * @brief Verifica se o caractere é '>'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for '>', senão retorna FALSE.
+ */
+
 int isBiggerKeySymbol(char symbol){
     if (symbol == '>'){
         return TRUE;
@@ -123,12 +145,26 @@ int isBiggerKeySymbol(char symbol){
     return FALSE;
 }
 
+/**
+ * @brief Verifica se o caractere é '<'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for '<', senão retorna FALSE.
+ */
+
 int isLowerKeySymbol(char symbol){
     if (symbol == '<'){
         return TRUE;
     }
     return FALSE;
 }
+
+/**
+ * @brief Verifica se o caractere é '_'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for '_', senão retorna FALSE.
+ */
 
 int isUnderScore(char symbol){
     if (symbol == '_'){

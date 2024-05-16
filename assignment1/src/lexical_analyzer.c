@@ -1,36 +1,50 @@
 #include "../header/lexical_analyzer.h"
 
+/**
+ * @brief Funcao que implementa as regras de transicao do automato finito deterministico (AFD).
+ * 
+ * Esta funcao recebe como entrada o arquivo de entrada, o estado atual do AFD, o simbolo atual e o buffer.
+ * Baseado no estado atual e no simbolo atual, determina o proximo estado do AFD.
+ * 
+ * @param file Arquivo de entrada contendo o programa em processo de compilacao.
+ * @param current_state Estado atual do AFD.
+ * @param symbol Simbolo atual lido na fita de entrada.
+ * @param buffer Cadeia lida ate o momento, entre o estado inicial ate chegar um estado final.
+ * @return State Proximo estado do AFD.
+ */
+
 State transition_rules(FILE* file, State current_state, char symbol, char* buffer){
     switch(current_state){
         case START:
+            // Verifica se o simbolo e uma letra para identificar palavras-chave
             if (isLetter(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
-
+            // Verifica se o simbolo e um sublinhado para identificar identificadores
             } else if (isUnderScore(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
-
+            // Verifica se o simbolo e um simbolo chave simples
             } else if(isSimpleKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
-
+            // Verifica se o simbolo e ':', potencial inicio de ':='
             } else if(isDoubleDotsKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return DOUBLE_DOTS_KEYSYMBOL;
-
+            // Verifica se o simbolo e '<', potencial inicio de '<=', '<>' ou '<'
             } else if(isLowerKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return LOWER_KEYSYMBOL;
-
+            // Verifica se o simbolo e '>', potencial inicio de '>=' ou '>'
             } else if(isBiggerKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return BIGGER_KEYSYMBOL;
-
+            // Verifica se o simbolo e um digito
             } else if(isDigit(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return NUMBER;
-            
+            // Verifica se o simbolo e '{', inicio de um comentario            
             } else if(BeginComment(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return COMMENT;
@@ -164,6 +178,17 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
     return START;
 }
 
+/**
+ * @brief Analisa o arquivo de entrada caractere por caractere, aplicando as regras do autômato finito determinístico (AFD) 
+ * para identificar tokens e suas classes.
+ * 
+ * @param file Arquivo de entrada contendo o código fonte a ser analisado.
+ * @param foutput Arquivo de saída onde os tokens e suas classes serão registrados.
+ * @param keywords Tabela hash contendo as palavras-chave da linguagem.
+ * @param keysymbols Tabela hash contendo os símbolos da linguagem.
+ * @return int Retorna o último caractere lido do arquivo de entrada.
+ */
+
 int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
     State current_state = START;
     char symbol;
@@ -186,6 +211,13 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     
     return symbol;
 }
+
+/**
+ * @brief Função de alto nível que executa o analisador léxico até o final do arquivo.
+ * 
+ * @param file Arquivo de entrada contendo o código fonte a ser analisado.
+ * @param foutput Arquivo de saída onde os tokens e suas classes serão registrados.
+ */
 
 void execute_lexical_analyzer(FILE* file, FILE* foutput){
     HashTable keywords = make_KeyWords();
