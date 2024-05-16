@@ -61,7 +61,7 @@ int search_token(HashTable *hash_table, const char *token){
  * 
  * @param hash_table Estrutura de dados utilizada para a tabela hash.
  * @param token Token do qual se deseja obter a classe.
- * @return char* Ponteiro para a classe do token, se encontrado, NULL caso contrário.
+ * @return char* Ponteiro para a classe do token, se encontrado, NULL caso contrario.
  */
 
 char* get_token_class(HashTable *hash_table, const char *token){
@@ -103,7 +103,7 @@ HashTable make_KeyWords(){
 }
 
 /**
- * @brief Inicializa a tabela hash com os símbolos da linguagem.
+ * @brief Inicializa a tabela hash com os simbolos da linguagem.
  * 
  * @return HashTable Tabela hash inicializada com os símbolos da linguagem.
  */

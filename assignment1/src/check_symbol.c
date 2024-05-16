@@ -57,7 +57,7 @@ int isNewLine(char symbol){
  * @brief Verifica se um caracter eh uma chave de abrir comentario
  *
  * @param symbol caracter a ser analisado
- * @return int retorna se a função foi concluida com sucesso ou nao
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
  */
 int BeginComment(char symbol){
     if (symbol == '{'){
@@ -70,7 +70,7 @@ int BeginComment(char symbol){
  * @brief Verifica se um caracter eh uma chave de fechar comentario
  *
  * @param symbol caracter a ser analisado
- * @return int retorna se a função foi concluida com sucesso ou nao
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
  */
 int CloseComment(char symbol){
     if (symbol == '}'){
@@ -84,7 +84,7 @@ int CloseComment(char symbol){
  * @brief Verifica se um caracter eh um simbolo reservado
  * 
  * @param symbol caracter a ser analisado
- * @return int retorna se a função foi concluida com sucesso ou nao
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
  */
 int isSimpleKeySymbol(char symbol){
     if (symbol == '=' ||
@@ -103,10 +103,10 @@ int isSimpleKeySymbol(char symbol){
 }
 
 /**
- * @brief Verifica se o caractere é ':'.
+ * @brief Verifica se o caractere e \':\'.
  * 
  * @param symbol O caractere a ser verificado.
- * @return int Retorna TRUE se o caractere for ':', senão retorna FALSE.
+ * @return int Retorna TRUE se o caractere for \':\', senao retorna FALSE.
  */
 
 int isDoubleDotsKeySymbol(char symbol){
@@ -117,12 +117,11 @@ int isDoubleDotsKeySymbol(char symbol){
 }
 
 /**
- * @brief Verifica se o caractere é '='.
+ * @brief Verifica se o caractere e \'=\'.
  * 
  * @param symbol O caractere a ser verificado.
- * @return int Retorna TRUE se o caractere for '=', senão retorna FALSE.
+ * @return int Retorna TRUE se o caractere for \'=\', senao retorna FALSE.
  */
-
 int isEqualKeySymbol(char symbol){
     if (symbol == '='){
         return TRUE;
@@ -132,10 +131,10 @@ int isEqualKeySymbol(char symbol){
 
 
 /**
- * @brief Verifica se o caractere é '>'.
+ * @brief Verifica se o caractere e \'>\'.
  * 
  * @param symbol O caractere a ser verificado.
- * @return int Retorna TRUE se o caractere for '>', senão retorna FALSE.
+ * @return int Retorna TRUE se o caractere for \'>\', senao retorna FALSE.
  */
 
 int isBiggerKeySymbol(char symbol){
@@ -146,12 +145,11 @@ int isBiggerKeySymbol(char symbol){
 }
 
 /**
- * @brief Verifica se o caractere é '<'.
+ * @brief Verifica se o caractere e \'<\'.
  * 
  * @param symbol O caractere a ser verificado.
- * @return int Retorna TRUE se o caractere for '<', senão retorna FALSE.
+ * @return int Retorna TRUE se o caractere for \'<\', senao retorna FALSE.
  */
-
 int isLowerKeySymbol(char symbol){
     if (symbol == '<'){
         return TRUE;
@@ -160,12 +158,11 @@ int isLowerKeySymbol(char symbol){
 }
 
 /**
- * @brief Verifica se o caractere é '_'.
+ * @brief Verifica se o caractere e \'_\'.
  * 
  * @param symbol O caractere a ser verificado.
- * @return int Retorna TRUE se o caractere for '_', senão retorna FALSE.
+ * @return int Retorna TRUE se o caractere for \'_\', senao retorna FALSE.
  */
-
 int isUnderScore(char symbol){
     if (symbol == '_'){
         return TRUE;

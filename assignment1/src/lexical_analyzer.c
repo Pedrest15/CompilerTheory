@@ -179,14 +179,14 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
 }
 
 /**
- * @brief Analisa o arquivo de entrada caractere por caractere, aplicando as regras do autômato finito determinístico (AFD) 
+ * @brief Analisa o arquivo de entrada caractere por caractere, aplicando as regras do automato finito deterministico (AFD) 
  * para identificar tokens e suas classes.
  * 
- * @param file Arquivo de entrada contendo o código fonte a ser analisado.
- * @param foutput Arquivo de saída onde os tokens e suas classes serão registrados.
+ * @param file Arquivo de entrada contendo o codigo fonte a ser analisado.
+ * @param foutput Arquivo de saida onde os tokens e suas classes serao registrados.
  * @param keywords Tabela hash contendo as palavras-chave da linguagem.
- * @param keysymbols Tabela hash contendo os símbolos da linguagem.
- * @return int Retorna o último caractere lido do arquivo de entrada.
+ * @param keysymbols Tabela hash contendo os simbolos da linguagem.
+ * @return int Retorna o ultimo caractere lido do arquivo de entrada.
  */
 
 int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
@@ -211,12 +211,11 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     
     return symbol;
 }
-
 /**
- * @brief Função de alto nível que executa o analisador léxico até o final do arquivo.
+ * @brief Funcao de alto nivel que executa o analisador lexico ate o final do arquivo.
  * 
- * @param file Arquivo de entrada contendo o código fonte a ser analisado.
- * @param foutput Arquivo de saída onde os tokens e suas classes serão registrados.
+ * @param file Arquivo de entrada contendo o codigo fonte a ser analisado.
+ * @param foutput Arquivo de saida onde os tokens e suas classes serao registrados.
  */
 
 void execute_lexical_analyzer(FILE* file, FILE* foutput){
