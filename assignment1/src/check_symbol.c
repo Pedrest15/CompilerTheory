@@ -54,29 +54,39 @@ int isNewLine(char symbol){
 }
 
 /**
- * @brief Verifica se um caracter eh uma chave de comentario, caso o estado atual
- * seja o start, entao tem que ser a chave da esquerda; e da direita, caso contrário
- * 
+ * @brief Verifica se um caracter eh uma chave de abrir comentario
+ *
  * @param symbol caracter a ser analisado
- * @return int retorna se a função foi concluida com sucesso ou nao
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
  */
-int isComment(State current_state, char symbol){
-    if (current_state == START && symbol == '{'){
-        return TRUE;
-    } else if ((current_state != START && symbol == '}')){
+int BeginComment(char symbol){
+    if (symbol == '{'){
         return TRUE;
     }
     return FALSE;
 }
 
 /**
+ * @brief Verifica se um caracter eh uma chave de fechar comentario
+ *
+ * @param symbol caracter a ser analisado
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
+ */
+int CloseComment(char symbol){
+    if (symbol == '}'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
+/**
  * @brief Verifica se um caracter eh um simbolo reservado
  * 
  * @param symbol caracter a ser analisado
- * @return int retorna se a função foi concluida com sucesso ou nao
+ * @return int retorna se a funcao foi concluida com sucesso ou nao
  */
 int isSimpleKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '=' ||
         symbol == '+' ||
         symbol == '-' ||
@@ -92,33 +102,69 @@ int isSimpleKeySymbol(char symbol){
     return FALSE;
 }
 
+/**
+ * @brief Verifica se o caractere e \':\'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for \':\', senao retorna FALSE.
+ */
+
 int isDoubleDotsKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == ':'){
         return TRUE;
     }
     return FALSE;
 }
 
+/**
+ * @brief Verifica se o caractere e \'=\'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for \'=\', senao retorna FALSE.
+ */
 int isEqualKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '='){
         return TRUE;
     }
     return FALSE;
 }
 
+
+/**
+ * @brief Verifica se o caractere e \'>\'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for \'>\', senao retorna FALSE.
+ */
+
 int isBiggerKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '>'){
         return TRUE;
     }
     return FALSE;
 }
 
+/**
+ * @brief Verifica se o caractere e \'<\'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for \'<\', senao retorna FALSE.
+ */
 int isLowerKeySymbol(char symbol){
-    // Listando todos os simbolos reservados
     if (symbol == '<'){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+ * @brief Verifica se o caractere e \'_\'.
+ * 
+ * @param symbol O caractere a ser verificado.
+ * @return int Retorna TRUE se o caractere for \'_\', senao retorna FALSE.
+ */
+int isUnderScore(char symbol){
+    if (symbol == '_'){
         return TRUE;
     }
     return FALSE;
@@ -131,14 +177,15 @@ int isLowerKeySymbol(char symbol){
  * @param symbol caracter a ser analisado
  * @return int retorna se a função foi concluida com sucesso ou nao
  */
-int isSeparator(State current_state, char symbol){
+int isSeparator(char symbol){
     if( isSpace(symbol) ||
         isNewLine(symbol) ||
         isSimpleKeySymbol(symbol) ||
         isDoubleDotsKeySymbol(symbol) ||
         isLowerKeySymbol(symbol) ||
         isBiggerKeySymbol(symbol) ||
-        isComment(current_state, symbol) ||
+        BeginComment(symbol) ||
+        isEqualKeySymbol(symbol) ||
         symbol == EOF){
         return TRUE;
     }

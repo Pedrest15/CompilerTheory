@@ -37,6 +37,13 @@ void insert_token(HashTable *hash_table, char* token, char* token_class){
     hash_table->table[index] = new_node;
 }
 
+/**
+ * @brief Busca um token na tabela hash.
+ * 
+ * @param hash_table Estrutura de dados utilizada para a tabela hash.
+ * @param token Token a ser buscado na tabela.
+ * @return int Retorna 1 se o token for encontrado na tabela, 0 caso contrário.
+ */
 int search_token(HashTable *hash_table, const char *token){
     unsigned int index = hash_value(token);
     Node *current = hash_table->table[index];
@@ -49,6 +56,14 @@ int search_token(HashTable *hash_table, const char *token){
     return 0;
 }
 
+/**
+ * @brief Obtém a classe de um token na tabela hash.
+ * 
+ * @param hash_table Estrutura de dados utilizada para a tabela hash.
+ * @param token Token do qual se deseja obter a classe.
+ * @return char* Ponteiro para a classe do token, se encontrado, NULL caso contrario.
+ */
+
 char* get_token_class(HashTable *hash_table, const char *token){
     unsigned int index = hash_value(token);
     Node *current = hash_table->table[index];
@@ -60,6 +75,12 @@ char* get_token_class(HashTable *hash_table, const char *token){
     }
     return NULL;
 }
+
+/**
+ * @brief Inicializa a tabela hash com as palavras-chave da linguagem.
+ * 
+ * @return HashTable Tabela hash inicializada com as palavras-chave da linguagem.
+ */
 
 HashTable make_KeyWords(){
     HashTable hash_table;
@@ -80,6 +101,12 @@ HashTable make_KeyWords(){
 
     return hash_table;
 }
+
+/**
+ * @brief Inicializa a tabela hash com os simbolos da linguagem.
+ * 
+ * @return HashTable Tabela hash inicializada com os símbolos da linguagem.
+ */
 
 HashTable make_KeySymbols(){
     HashTable hash_table;
@@ -105,4 +132,10 @@ HashTable make_KeySymbols(){
     insert_token(&hash_table, ")", "simbolo_parentese_direita");
 
     return hash_table;
+}
+
+void destroy_table(HashTable tb){
+    for (int i = 0; i < HASH_SIZE; i++) {
+        free(tb.table[i]);
+    }
 }

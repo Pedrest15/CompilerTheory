@@ -1,23 +1,25 @@
 VAR,VAR
-a,ident
+a_,ident
 ,,simbolo_virgula
 b,ident
 ,,simbolo_virgula
-c,ident
+____c,ident
 ;,simbolo_ponto_virgula
 BEGIN,BEGIN
 a,ident
-:=,simbolo_atribuicao
-2,numero
+:,ERRO LEXICO => faltando '=' a direita
+@,ERRO LEXICO => caracter invalido
++,simbolo_mais
+1,numero
 ;,simbolo_ponto_virgula
-b,ident
+b},ERRO LEXICO => nome de identificador com caracter invalido
 :=,simbolo_atribuicao
-3,numero
+3a,ERRO LEXICO => numero seguido por letra
+a,ident
 ;,simbolo_ponto_virgula
 c,ident
 :=,simbolo_atribuicao
-=,simbolo_comparacao
-2,numero
+@,ERRO LEXICO => caracter invalido
 +,simbolo_mais
 b,ident
 END,END

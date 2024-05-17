@@ -17,7 +17,9 @@ int isLowerKeySymbol(char symbol);
 int isBiggerKeySymbol(char symbol);
 int isEqualKeySymbol(char symbol);
 int isDoubleDotsKeySymbol(char symbol);
-int isComment(State current_state,char symbol);
-int isSeparator(State current_state, char symbol);
+int isUnderScore(char symbol);
+int BeginComment(char symbol);
+int CloseComment(char symbol);
+int isSeparator(char symbol);
 
 #endif

@@ -23,5 +23,6 @@ int search_token(HashTable *hash_table, const char *token);
 char* get_token_class(HashTable *hash_table, const char *token);
 HashTable make_KeyWords();
 HashTable make_KeySymbols();
+void destroy_table(HashTable tb);
 
 #endif

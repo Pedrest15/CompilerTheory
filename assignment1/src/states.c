@@ -28,33 +28,21 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             if (search_token(&keywords,buffer)){
                 //escreve o token e sua classe no arquivo de saida
                 write_token(foutput,buffer,get_token_class(&keywords,buffer));
-                printf("%s, %s\n", buffer,get_token_class(&keywords,buffer));
+                
             } else { //caso nao seja uma palavra reservada, eh um identificador
                 //escreve o token e sua classe no arquivo de saida
                 write_token(foutput,buffer,"ident");
-                printf("%s, id\n", buffer);
             }
             
             return TRUE;
 
         case DONE_KEYSYMBOL:
-            //retroceder um caracter
-            /*if (symbol != EOF){
-                backtrack(file);
-            }*/
-
-            //coloca \0 no buffer para escrever no arquivo sem problemas
+            // Coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
-            //confere se buffer contem um simbolo reservado
-            if (search_token(&keysymbols,buffer)){
-                //escreve o token e sua classe no arquivo de saida
-                write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
-                printf("%s, %s\n", buffer,get_token_class(&keysymbols,buffer));
-            } else {
-                //erro
-                printf("%s, %s\n", buffer,"YUDAO, ERRO AQUI");;
-            }
-            
+
+            // Escreve o token e sua classe no arquivo de saida
+            write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+
             return TRUE;
 
         case DONE_IDENTIFIER:
@@ -68,7 +56,7 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
             //escreve o token e sua classe identificador no arquivo de saida
             write_token(foutput,buffer,"ident");
-            printf("%s, id\n", buffer);
+
             return TRUE;
 
         case DONE_NUMBER:
@@ -82,14 +70,86 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
             //escreve o token e sua classe numero no arquivo de saida
             write_token(foutput,buffer,"numero");
-            printf("%s, num\n", buffer);
 
         case DONE_COMMENT:
             //comentarios sao ignorados para o arquivo de saida
             return TRUE;
-        
+
         default:
             //caso o estado atual nao seja um estado final
+            return FALSE;
+    }
+}
+
+/**
+ * Funcao que lida com os estados de erro do automato finito deterministico (AFD).
+ * Esta funcao executa as operacoes apropriadas quando o analisador lexico
+ * encontra um estado de erro.
+ *
+ * @param file Arquivo de entrada contendo o programa em processo de compilacao.
+ * @param foutput Arquivo de saida do analisador lexico, contendo os tokens e suas classes.
+ * @param keywords Tabela com as palavras reservadas da linguagem.
+ * @param keysymbols Tabela com os simbolos reservados da linguagem.
+ * @param current_state Estado atual da maquina de Moore.
+ * @param symbol Ultimo caractere lido na fita.
+ * @param buffer Cadeia lida ate o momento, do estado inicial ate chegar a um estado final.
+ * @return Retorna verdadeiro se o estado atual for um estado de erro, caso contrario, retorna falso.
+ */
+
+int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+                State current_state, char symbol, char* buffer){
+    switch (current_state){
+        case ERROR_INVALID_SYMBOL:
+            //coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+            
+            //escreve no arquivo de saida
+            write_token(foutput,buffer,"ERRO LEXICO => caracter invalido");
+
+            return TRUE;
+
+        case ERROR_INVALID_IDENTIFIER:
+            //coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+            
+            //escreve no arquivo de saida
+            write_token(foutput,buffer,"ERRO LEXICO => nome de identificador com caracter invalido");
+
+            return TRUE;
+        
+        case ERROR_NUMBER_LETTER:
+            //coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+
+            //escreve no arquivo de saida
+            write_token(foutput,buffer,"ERRO LEXICO => numero seguido por letra");
+
+            return TRUE;
+        
+        case ERROR_INVALID_NUMBER:
+            //coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+            
+            //escreve no arquivo de saida
+            write_token(foutput,buffer,"ERRO LEXICO => numero com caracter invalido");
+
+            return TRUE;
+        
+        case ERROR_DOUBLE_DOTS:
+            //retroceder um caracter
+            if (symbol != EOF){
+                backtrack(file);
+            }
+
+            //coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+
+            write_token(foutput,buffer,"ERRO LEXICO => faltando '=' a direita");
+            
+            return TRUE;
+
+        default:
+            //caso o estado atual nao seja um estado de erro
             return FALSE;
     }
 }
