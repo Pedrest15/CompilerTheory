@@ -133,3 +133,9 @@ HashTable make_KeySymbols(){
 
     return hash_table;
 }
+
+void destroy_table(HashTable tb){
+    for (int i = 0; i < HASH_SIZE; i++) {
+        free(tb.table[i]);
+    }
+}

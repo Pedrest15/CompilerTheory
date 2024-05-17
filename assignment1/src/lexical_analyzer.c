@@ -12,7 +12,6 @@
  * @param buffer Cadeia lida ate o momento, entre o estado inicial ate chegar um estado final.
  * @return State Proximo estado do AFD.
  */
-
 State transition_rules(FILE* file, State current_state, char symbol, char* buffer){
     switch(current_state){
         case START:
@@ -20,30 +19,37 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             if (isLetter(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
+
             // Verifica se o simbolo e um sublinhado para identificar identificadores
             } else if (isUnderScore(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
+
             // Verifica se o simbolo e um simbolo chave simples
             } else if(isSimpleKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
+
             // Verifica se o simbolo e ':', potencial inicio de ':='
             } else if(isDoubleDotsKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return DOUBLE_DOTS_KEYSYMBOL;
+
             // Verifica se o simbolo e '<', potencial inicio de '<=', '<>' ou '<'
             } else if(isLowerKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return LOWER_KEYSYMBOL;
+
             // Verifica se o simbolo e '>', potencial inicio de '>=' ou '>'
             } else if(isBiggerKeySymbol(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return BIGGER_KEYSYMBOL;
+
             // Verifica se o simbolo e um digito
             } else if(isDigit(symbol)){
                 buffer[strlen(buffer)] = symbol;
                 return NUMBER;
+
             // Verifica se o simbolo e '{', inicio de um comentario            
             } else if(BeginComment(symbol)){
                 buffer[strlen(buffer)] = symbol;
@@ -157,7 +163,7 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             } else if (isSeparator(symbol)){
                 return DONE_NUMBER;
 
-            //carcter invalido no numero
+            //caracter invalido no numero
             } else {
                 buffer[strlen(buffer)] = symbol;
                 return ERROR_INVALID_NUMBER;
@@ -188,7 +194,6 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
  * @param keysymbols Tabela hash contendo os simbolos da linguagem.
  * @return int Retorna o ultimo caractere lido do arquivo de entrada.
  */
-
 int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
     State current_state = START;
     char symbol;
@@ -211,15 +216,19 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     
     return symbol;
 }
+
 /**
  * @brief Funcao de alto nivel que executa o analisador lexico ate o final do arquivo.
  * 
  * @param file Arquivo de entrada contendo o codigo fonte a ser analisado.
  * @param foutput Arquivo de saida onde os tokens e suas classes serao registrados.
  */
-
 void execute_lexical_analyzer(FILE* file, FILE* foutput){
     HashTable keywords = make_KeyWords();
     HashTable keysymbols = make_KeySymbols();
+
     while (lexical_analyzer(file,foutput,keywords,keysymbols) != EOF);
+
+    destroy_table(keywords);
+    destroy_table(keysymbols);
 }
