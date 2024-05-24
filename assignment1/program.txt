@@ -1,7 +1,0 @@
-VAR a_,b,____c;
-
-BEGIN
-    a: @ + 1;
-    b}:=3aa;
-    c:=@ + b
-END.

@@ -34,7 +34,7 @@ int isDigit(char symbol){
  * @return int retorna se a função foi concluida com sucesso ou nao
  */
 int isSpace(char symbol){
-    if (symbol == ' '){
+    if (symbol == ' ' || symbol == '\t'){
         return TRUE;
     }
     return FALSE;
