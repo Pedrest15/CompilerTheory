@@ -12,8 +12,8 @@
  * @param buffer cadeia lida ate o momento, entre o estado inicial ate chegar um estado final
  *@return int retorna se o estado atual eh um final ou nao
  */
-int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
-                State current_state, char symbol, char* buffer){
+void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+                State current_state, char symbol, char* buffer,TokenClass *token){
     switch (current_state){
         case DONE_KEYWORD:
             //retroceder um caracter
@@ -28,13 +28,17 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             if (search_token(&keywords,buffer)){
                 //escreve o token e sua classe no arquivo de saida
                 write_token(foutput,buffer,get_token_class(&keywords,buffer));
+                strcpy(token->value,buffer);
+                strcpy(token->_class,get_token_class(&keywords,buffer));
                 
             } else { //caso nao seja uma palavra reservada, eh um identificador
                 //escreve o token e sua classe no arquivo de saida
                 write_token(foutput,buffer,"ident");
+                strcpy(token->value,buffer);
+                strcpy(token->_class,"ident");
             }
-            
-            return TRUE;
+
+            break;
 
         case DONE_KEYSYMBOL:
             // Coloca \0 no buffer para escrever no arquivo sem problemas
@@ -42,8 +46,10 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
             // Escreve o token e sua classe no arquivo de saida
             write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+            strcpy(token->value,buffer);
+            strcpy(token->_class,get_token_class(&keysymbols,buffer));
 
-            return TRUE;
+            break;
 
         case DONE_IDENTIFIER:
             //retroceder um caracter
@@ -56,8 +62,10 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
             //escreve o token e sua classe identificador no arquivo de saida
             write_token(foutput,buffer,"ident");
+            strcpy(token->value,buffer);
+            strcpy(token->_class,"ident");
 
-            return TRUE;
+            break;
 
         case DONE_NUMBER:
             //retroceder um caracter
@@ -70,14 +78,22 @@ int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
 
             //escreve o token e sua classe numero no arquivo de saida
             write_token(foutput,buffer,"numero");
+            strcpy(token->value,buffer);
+            strcpy(token->_class,"numero");
+
+            break;
 
         case DONE_COMMENT:
             //comentarios sao ignorados para o arquivo de saida
-            return TRUE;
+            buffer[strlen(buffer)] = '\0';
+            
+            strcpy(token->value,buffer);
+            strcpy(token->_class,"chave comentario");
+            break;
 
         default:
             //caso o estado atual nao seja um estado final
-            return FALSE;
+            break;
     }
 }
 

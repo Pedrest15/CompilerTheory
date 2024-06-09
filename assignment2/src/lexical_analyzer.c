@@ -209,7 +209,7 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
  * @param keysymbols Tabela hash contendo os simbolos da linguagem.
  * @return int Retorna o ultimo caractere lido do arquivo de entrada.
  */
-int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols){
+int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass *token){
     State current_state = START;
     char symbol;
     char buffer[100] = "";
@@ -218,7 +218,9 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
         symbol = fgetc(file);
         
         current_state = transition_rules(file, current_state,symbol,buffer);
-        if(final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
+
+        final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,token);       
+        if(strcmp(token->_class,"")!=0){
             break;
         } else if(error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
             break;
@@ -230,20 +232,4 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
     }
     
     return symbol;
-}
-
-/**
- * @brief Funcao de alto nivel que executa o analisador lexico ate o final do arquivo.
- * 
- * @param file Arquivo de entrada contendo o codigo fonte a ser analisado.
- * @param foutput Arquivo de saida onde os tokens e suas classes serao registrados.
- */
-void execute_lexical_analyzer(FILE* file, FILE* foutput){
-    HashTable keywords = make_KeyWords();
-    HashTable keysymbols = make_KeySymbols();
-
-    while (lexical_analyzer(file,foutput,keywords,keysymbols) != EOF);
-
-    destroy_table(keywords);
-    destroy_table(keysymbols);
 }

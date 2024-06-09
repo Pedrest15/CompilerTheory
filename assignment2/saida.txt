@@ -31,7 +31,7 @@ n,ident
 1,numero
 ;,simbolo_ponto_virgula
 END,END
-{,ERRO LEXICO => comentario nao fechado
-},ERRO LEXICO => fechar comentario sem ter aberto
+{,ERRO LEXICO => comentario nao fechado na linha
+},ERRO LEXICO => fechar comentario sem ter aberto na linha
 END,END
 .,simbolo_ponto

@@ -2,9 +2,11 @@
 #define __STATES_H__
 
 #include <stdio.h>
+#include <string.h>
 
 #include "../header/tables.h"
 #include "../header/files_actions.h"
+#include "../header/parser.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -33,8 +35,8 @@ typedef enum {
     ERROR_CLOSE_COMMENT
 } State;
 
-int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
-                State current_state, char symbol, char* buffer);
+void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+                State current_state, char symbol, char* buffer,TokenClass *token);
 int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer);
 

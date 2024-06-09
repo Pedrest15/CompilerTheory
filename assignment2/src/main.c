@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "../header/open_close.h"
-#include "../header/lexical_analyzer.h"
 #include "../header/parser.h"
 
 #define TRUE 1
@@ -19,8 +18,8 @@ int main(){
     FILE* file = open_file(filename_input,FILE_READT);
     FILE* foutput = open_file(filename_output,FILE_WRITET);
 
-    // inicia o analisador lexico
-    execute_lexical_analyzer(file,foutput);
+    // inicia o analisador sintatico
+    parser(file,foutput);
 
     //fecha os arquivos usados
     close_file(file);
