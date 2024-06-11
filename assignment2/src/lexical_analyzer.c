@@ -12,7 +12,7 @@
  * @param buffer Cadeia lida ate o momento, entre o estado inicial ate chegar um estado final.
  * @return State Proximo estado do AFD.
  */
-State transition_rules(FILE* file, State current_state, char symbol, char* buffer){
+State transition_rules(FILE* file, State current_state, char symbol, char* buffer,int* line){
     switch(current_state){
         case START:
             // Verifica se o simbolo e uma letra para identificar palavras-chave
@@ -56,12 +56,16 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return COMMENT;
 
             // caso a fita do automato inicie com espaco ou quebra de linha
-            } else if(isSpace(symbol) || isNewLine(symbol)){
+            } else if(isSpace(symbol)){
                 return START;
 
+            } else if(isNewLine(symbol)) {
+                (*line)++;
+                
+                return START;
             // caso de EOF, ignorado pelo automato
             } else if(symbol == EOF){
-                break;
+                return START;
 
             // fechar comentario sem ter aberto um
             } else if (CloseComment(symbol)){
@@ -88,7 +92,11 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             
             } else if (isSeparator(symbol)){
                 return DONE_KEYWORD;
-            
+
+            } else if(isNewLine(symbol)){    
+                (*line)++;
+
+                return DONE_KEYWORD;
             //caracter invalido no nome
             } else {
                 buffer[strlen(buffer)] = symbol;
@@ -120,7 +128,7 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return DONE_KEYSYMBOL;    
             
             } else {
-                return DONE_KEYSYMBOL;
+                return DONE_BACK_KEYSYMBOL;
             }
             break;
 
@@ -132,7 +140,7 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 
             //buffer apenas com '>'
             } else {
-                return DONE_KEYSYMBOL;
+                return DONE_BACK_KEYSYMBOL;
             }
             break;
 
@@ -148,6 +156,10 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             } else if (isSeparator(symbol)){
                 return DONE_IDENTIFIER;
 
+            } else if(isNewLine(symbol)){    
+                (*line)++;
+
+                return DONE_IDENTIFIER;
             //carcter invalido no nome
             } else {
                 buffer[strlen(buffer)] = symbol;
@@ -168,6 +180,10 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             } else if (isSeparator(symbol)){
                 return DONE_NUMBER;
 
+            } else if(isNewLine(symbol)){    
+                (*line)++;
+
+                return DONE_NUMBER;
             //caracter invalido no numero
             } else {
                 buffer[strlen(buffer)] = symbol;
@@ -179,6 +195,7 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             if (CloseComment(symbol)){
                 return DONE_COMMENT;
             } else if (isNewLine(symbol)){
+                (*line)++;
                 return ERROR_COMMENT;
             } else {
                 return COMMENT;
@@ -187,6 +204,10 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
 
         case INVALID_SYMBOL:
             if (isSeparator(symbol)){
+                return ERROR_INVALID_SYMBOL;
+            } else if(isNewLine(symbol)){    
+                (*line)++;
+
                 return ERROR_INVALID_SYMBOL;
             } else {
                 buffer[strlen(buffer)] = symbol;
@@ -209,20 +230,22 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
  * @param keysymbols Tabela hash contendo os simbolos da linguagem.
  * @return int Retorna o ultimo caractere lido do arquivo de entrada.
  */
-int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass *token){
+int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass *token,int* line){
     State current_state = START;
     char symbol;
     char buffer[100] = "";
+    strcpy(token->value, "");
+    strcpy(token->_class, "");
     
     while (1) {
         symbol = fgetc(file);
         
-        current_state = transition_rules(file, current_state,symbol,buffer);
+        current_state = transition_rules(file, current_state,symbol,buffer,line);
 
         final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,token);       
         if(strcmp(token->_class,"")!=0){
             break;
-        } else if(error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer)){
+        } else if(error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,line)){
             break;
         }
     

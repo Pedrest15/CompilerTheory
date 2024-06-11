@@ -27,13 +27,13 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             //confere se buffer contem uma palavra reservada
             if (search_token(&keywords,buffer)){
                 //escreve o token e sua classe no arquivo de saida
-                write_token(foutput,buffer,get_token_class(&keywords,buffer));
+                //write_token(foutput,buffer,get_token_class(&keywords,buffer));
                 strcpy(token->value,buffer);
                 strcpy(token->_class,get_token_class(&keywords,buffer));
                 
             } else { //caso nao seja uma palavra reservada, eh um identificador
                 //escreve o token e sua classe no arquivo de saida
-                write_token(foutput,buffer,"ident");
+                //write_token(foutput,buffer,"ident");
                 strcpy(token->value,buffer);
                 strcpy(token->_class,"ident");
             }
@@ -45,7 +45,23 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             buffer[strlen(buffer)] = '\0';
 
             // Escreve o token e sua classe no arquivo de saida
-            write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+            //write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
+            strcpy(token->value,buffer);
+            strcpy(token->_class,get_token_class(&keysymbols,buffer));
+
+            break;
+
+        case DONE_BACK_KEYSYMBOL:
+            //retroceder um caracter
+            if (symbol != EOF){
+                backtrack(file);
+            }
+            
+            // Coloca \0 no buffer para escrever no arquivo sem problemas
+            buffer[strlen(buffer)] = '\0';
+
+            // Escreve o token e sua classe no arquivo de saida
+            //write_token(foutput,buffer,get_token_class(&keysymbols,buffer));
             strcpy(token->value,buffer);
             strcpy(token->_class,get_token_class(&keysymbols,buffer));
 
@@ -61,7 +77,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             buffer[strlen(buffer)] = '\0';
 
             //escreve o token e sua classe identificador no arquivo de saida
-            write_token(foutput,buffer,"ident");
+            //write_token(foutput,buffer,"ident");
             strcpy(token->value,buffer);
             strcpy(token->_class,"ident");
 
@@ -77,7 +93,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             buffer[strlen(buffer)] = '\0';
 
             //escreve o token e sua classe numero no arquivo de saida
-            write_token(foutput,buffer,"numero");
+            //write_token(foutput,buffer,"numero");
             strcpy(token->value,buffer);
             strcpy(token->_class,"numero");
 
@@ -113,7 +129,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
  */
 
 int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
-                State current_state, char symbol, char* buffer){
+                State current_state, char symbol, char* buffer,int* line){
     switch (current_state){
         case ERROR_INVALID_SYMBOL:
             //retroceder um caracter
@@ -125,7 +141,8 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             buffer[strlen(buffer)] = '\0';
             
             //escreve no arquivo de saida
-            write_token(foutput,buffer,"ERRO LEXICO => caracter invalido");
+            write_error(foutput,"Erro lexico: caracter invalido",line);
+            //write_token(foutput,buffer,"ERRO LEXICO => caracter invalido");
 
             return TRUE;
         
@@ -134,7 +151,8 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             buffer[strlen(buffer)] = '\0';
 
             //escreve no arquivo de saida
-            write_token(foutput,buffer,"ERRO LEXICO => numero seguido por letra");
+            //write_token(foutput,buffer,"ERRO LEXICO => numero seguido por letra");
+            write_error(foutput,"Erro lexico: numero seguido por letra na linha",line);
 
             return TRUE;
         
@@ -143,7 +161,8 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             buffer[strlen(buffer)] = '\0';
             
             //escreve no arquivo de saida
-            write_token(foutput,buffer,"ERRO LEXICO => numero com caracter invalido");
+            //write_token(foutput,buffer,"ERRO LEXICO => numero com caracter invalido");
+            write_error(foutput,"Erro lexico: numero com caracter invalido na linha",line);
 
             return TRUE;
         
@@ -156,7 +175,8 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             //coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
 
-            write_token(foutput,buffer,"ERRO LEXICO => faltando '=' a direita");
+            //write_token(foutput,buffer,"ERRO LEXICO => faltando '=' a direita");
+            write_error(foutput,"Erro lexico: simbolo '=' faltando a direita de ':' na linha",line);
             
             return TRUE;
 
@@ -164,16 +184,18 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             //coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
 
-            write_token(foutput,buffer,"ERRO LEXICO => comentario nao fechado na linha");
-            
+            //write_token(foutput,buffer,"ERRO LEXICO => comentario nao fechado na linha");
+            write_error(foutput,"Erro lexico: comentario nao fechado na linha",line);
+
             return TRUE;
 
         case ERROR_CLOSE_COMMENT:
             //coloca \0 no buffer para escrever no arquivo sem problemas
             buffer[strlen(buffer)] = '\0';
 
-            write_token(foutput,buffer,"ERRO LEXICO => fechar comentario sem ter aberto na linha");
-            
+            //write_token(foutput,buffer,"ERRO LEXICO => fechar comentario sem ter aberto na linha");
+            write_error(foutput,"Erro lexico: fechar comentario sem ter aberto na linha",line);
+
             return TRUE;
 
         default:

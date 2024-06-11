@@ -179,7 +179,6 @@ int isUnderScore(char symbol){
  */
 int isSeparator(char symbol){
     if( isSpace(symbol) ||
-        isNewLine(symbol) ||
         isSimpleKeySymbol(symbol) ||
         isDoubleDotsKeySymbol(symbol) ||
         isLowerKeySymbol(symbol) ||

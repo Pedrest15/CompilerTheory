@@ -11,6 +11,6 @@
 #include "../header/files_actions.h"
 
 void backtrack(FILE* file);
-int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,TokenClass *token);
+int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,TokenClass *token,int* line);
 
 #endif

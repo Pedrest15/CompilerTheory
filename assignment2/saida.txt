@@ -1,37 +1,6 @@
-VAR,VAR
-n,ident
-,,simbolo_virgula
-fat,ident
-;,simbolo_ponto_virgula
-BGIN,ident
-n,ident
-:=,simbolo_atribuicao
-4,numero
-;,simbolo_ponto_virgula
-fat@,ERRO LEXICO => caracter invalido
-:=,simbolo_atribuicao
-1,numero
-;,simbolo_ponto_virgula
-WHILE,WHILE
-n,ident
-=,simbolo_comparacao
->,simbolo_maior
-DO,DO
-BEGIN,BEGIN
-fat,ident
-:=,simbolo_atribuicao
-fat,ident
-*,simbolo_multiplicacao
-n,ident
-;,simbolo_ponto_virgula
-n,ident
-:=,simbolo_atribuicao
-n,ident
--,simbolo_menos
-1,numero
-;,simbolo_ponto_virgula
-END,END
-{,ERRO LEXICO => comentario nao fechado na linha
-},ERRO LEXICO => fechar comentario sem ter aberto na linha
-END,END
-.,simbolo_ponto
+Erro sintatico: 'THEN' faltando na linha 4
+Erro sintatico: ponto-e-virgula ';' faltando na linha 4
+Erro lexico: caracter invalido 5
+Erro sintatico: parentese esquerdo '()' faltando na linha 5
+Erro sintatico: 'END' faltando na linha 5
+Erro sintatico: faltou '.' ao final do programa na linha 5

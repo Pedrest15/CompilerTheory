@@ -99,6 +99,7 @@ HashTable make_KeyWords(){
     insert_token(&hash_table, "then", "THEN");
     insert_token(&hash_table, "while", "WHILE");
     insert_token(&hash_table, "do", "DO");
+    insert_token(&hash_table, "odd", "ODD");
 
     insert_token(&hash_table, "VAR", "VAR");
     insert_token(&hash_table, "CONST", "CONST");
@@ -110,6 +111,7 @@ HashTable make_KeyWords(){
     insert_token(&hash_table, "THEN", "THEN");
     insert_token(&hash_table, "WHILE", "WHILE");
     insert_token(&hash_table, "DO", "DO");
+    insert_token(&hash_table, "ODD", "ODD");
 
     return hash_table;
 }

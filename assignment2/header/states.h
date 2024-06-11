@@ -24,6 +24,7 @@ typedef enum {
     INVALID_SYMBOL,
     DONE_KEYWORD,
     DONE_KEYSYMBOL,
+    DONE_BACK_KEYSYMBOL,
     DONE_IDENTIFIER,
     DONE_NUMBER,
     DONE_COMMENT,
@@ -38,6 +39,6 @@ typedef enum {
 void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer,TokenClass *token);
 int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
-                State current_state, char symbol, char* buffer);
+                State current_state, char symbol, char* buffer,int* line);
 
 #endif

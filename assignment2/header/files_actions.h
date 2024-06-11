@@ -5,5 +5,6 @@
 
 void backtrack(FILE* file);
 void write_token(FILE* file, char* token, char* token_class);
+void write_error(FILE* file, char* msg, int* line);
 
 #endif
