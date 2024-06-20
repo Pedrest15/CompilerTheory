@@ -1,0 +1,7 @@
+VAR n, fat;
+BEGIN
+    a:=2;
+    IF a>2 THEN
+        b:=3;
+    c:=1+b;
+END.

@@ -42,18 +42,23 @@ void relational(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols
     
         return;
     }
+
+    write_error(foutput,"Erro sintatico: simbolo de relacional faltando na linha",line);
 }
 
 void conditional(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if (strcmp(token->_class,"ODD")==0) {
         lexical_analyzer(file,foutput,keywords,keysymbols,token,line);
+
         expression(file,foutput,keywords,keysymbols,token,line);
         
         return;
     }
 
     expression(file,foutput,keywords,keysymbols,token,line);
+
     relational(file,foutput,keywords,keysymbols,token,line);
+
     expression(file,foutput,keywords,keysymbols,token,line);
 }
 

@@ -22,7 +22,7 @@ void write_token(FILE* file, char* token, char* token_class){
 }
 
 void write_error(FILE* file, char* msg, int* line){
-    fprintf(file, "%s %d\n", msg,(*line)-3);
+    fprintf(file, "%s %d\n", msg,(*line));
 
 }
 

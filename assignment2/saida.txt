@@ -1,6 +1,6 @@
-Erro sintatico: 'THEN' faltando na linha 4
-Erro sintatico: ponto-e-virgula ';' faltando na linha 4
-Erro lexico: caracter invalido 5
-Erro sintatico: parentese esquerdo '()' faltando na linha 5
-Erro sintatico: 'END' faltando na linha 5
-Erro sintatico: faltou '.' ao final do programa na linha 5
+Erro sintatico: trecho de codigo apos '.' na linha 10
+Erro sintatico: trecho de codigo apos '.' na linha 11
+Erro sintatico: trecho de codigo apos '.' na linha 13
+Erro sintatico: trecho de codigo apos '.' na linha 15
+Erro sintatico: trecho de codigo apos '.' na linha 17
+Erro sintatico: trecho de codigo apos '.' na linha 18
