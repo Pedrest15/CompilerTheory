@@ -1,4 +1,4 @@
-#include "../header/command.h"
+#include "../../header/command.h"
 
 void more_cmd(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass* token, int* line) {
     if (strcmp(token->_class, "simbolo_ponto_virgula") == 0) {

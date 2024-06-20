@@ -1,6 +1,7 @@
-#include "../header/block.h"
+#include "../../header/block.h"
 
 void procedure(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
+    
     if(strcmp(token->_class,"PROCEDURE")==0){
         lexical_analyzer(file,foutput,keywords,keysymbols,token,line);
 
@@ -28,11 +29,14 @@ void procedure(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,
 
 void declaration(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token, int* line){
     constant(file,foutput,keywords,keysymbols,token,line);
+
     variable(file,foutput,keywords,keysymbols,token,line);
+    
     procedure(file,foutput,keywords,keysymbols,token,line);
 }
 
 void block(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     declaration(file,foutput,keywords,keysymbols,token,line);
+
     command(file,foutput,keywords,keysymbols,token,line);
 }

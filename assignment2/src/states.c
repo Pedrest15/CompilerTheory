@@ -12,7 +12,7 @@
  * @param buffer cadeia lida ate o momento, entre o estado inicial ate chegar um estado final
  *@return int retorna se o estado atual eh um final ou nao
  */
-void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer,TokenClass *token){
     switch (current_state){
         case DONE_KEYWORD:
@@ -38,7 +38,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
                 strcpy(token->_class,"ident");
             }
 
-            break;
+            return TRUE;
 
         case DONE_KEYSYMBOL:
             // Coloca \0 no buffer para escrever no arquivo sem problemas
@@ -49,7 +49,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             strcpy(token->value,buffer);
             strcpy(token->_class,get_token_class(&keysymbols,buffer));
 
-            break;
+            return TRUE;
 
         case DONE_BACK_KEYSYMBOL:
             //retroceder um caracter
@@ -65,7 +65,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             strcpy(token->value,buffer);
             strcpy(token->_class,get_token_class(&keysymbols,buffer));
 
-            break;
+            return TRUE;
 
         case DONE_IDENTIFIER:
             //retroceder um caracter
@@ -81,7 +81,7 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             strcpy(token->value,buffer);
             strcpy(token->_class,"ident");
 
-            break;
+            return TRUE;
 
         case DONE_NUMBER:
             //retroceder um caracter
@@ -97,19 +97,18 @@ void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysy
             strcpy(token->value,buffer);
             strcpy(token->_class,"numero");
 
-            break;
+            return TRUE;
 
         case DONE_COMMENT:
             //comentarios sao ignorados para o arquivo de saida
             buffer[strlen(buffer)] = '\0';
             
-            strcpy(token->value,buffer);
-            strcpy(token->_class,"chave comentario");
-            break;
+            //comentario nao eh relevante ao parser
+            return FALSE;
 
         default:
             //caso o estado atual nao seja um estado final
-            break;
+            return FALSE;
     }
 }
 
@@ -141,7 +140,7 @@ int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysym
             buffer[strlen(buffer)] = '\0';
             
             //escreve no arquivo de saida
-            write_error(foutput,"Erro lexico: caracter invalido",line);
+            write_error(foutput,"Erro lexico: caracter invalido na linha ",line);
             //write_token(foutput,buffer,"ERRO LEXICO => caracter invalido");
 
             return TRUE;

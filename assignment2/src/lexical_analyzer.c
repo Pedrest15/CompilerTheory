@@ -94,7 +94,6 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return DONE_KEYWORD;
 
             } else if(isNewLine(symbol)){    
-                (*line)++;
 
                 return DONE_KEYWORD;
             //caracter invalido no nome
@@ -157,7 +156,6 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return DONE_IDENTIFIER;
 
             } else if(isNewLine(symbol)){    
-                (*line)++;
 
                 return DONE_IDENTIFIER;
             //carcter invalido no nome
@@ -181,7 +179,6 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
                 return DONE_NUMBER;
 
             } else if(isNewLine(symbol)){    
-                (*line)++;
 
                 return DONE_NUMBER;
             //caracter invalido no numero
@@ -193,9 +190,12 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
 
         case COMMENT:
             if (CloseComment(symbol)){
+                (*line)++;
+
                 return DONE_COMMENT;
             } else if (isNewLine(symbol)){
                 (*line)++;
+
                 return ERROR_COMMENT;
             } else {
                 return COMMENT;
@@ -204,9 +204,9 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
 
         case INVALID_SYMBOL:
             if (isSeparator(symbol)){
+
                 return ERROR_INVALID_SYMBOL;
             } else if(isNewLine(symbol)){    
-                (*line)++;
 
                 return ERROR_INVALID_SYMBOL;
             } else {
@@ -245,9 +245,9 @@ int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable ke
         final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,token);       
         if(strcmp(token->_class,"")!=0){
             break;
-        } else if(error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,line)){
-            break;
-        }
+        } 
+        
+        error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,line);
     
         if (symbol == EOF){
             break;

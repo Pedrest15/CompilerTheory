@@ -1,4 +1,4 @@
-#include "../header/variable.h"
+#include "../../header/variable.h"
 
 void more_var(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if (strcmp(token->_class,"simbolo_virgula")==0) {
@@ -31,6 +31,5 @@ void variable(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,T
         } else {
             write_error(foutput,"Erro sintatico: ponto-e-virgula ';' faltando na linha",line);
         }
-        
     }
 }

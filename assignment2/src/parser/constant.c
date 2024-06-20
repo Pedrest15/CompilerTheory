@@ -1,4 +1,4 @@
-#include "../header/constant.h"
+#include "../../header/constant.h"
 
 void more_const(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if (strcmp(token->_class,"simbolo_virgula")==0){

@@ -1,4 +1,4 @@
-#include "../header/conditional.h"
+#include "../../header/conditional.h"
 
 void relational(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if (strcmp(token->_class,"simbolo_atribuicao")==0){

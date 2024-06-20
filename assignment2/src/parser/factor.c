@@ -1,4 +1,4 @@
-#include "../header/factor.h"
+#include "../../header/factor.h"
 
 void more_factor(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if(strcmp(token->_class,"simbolo_multiplicacao")==0){

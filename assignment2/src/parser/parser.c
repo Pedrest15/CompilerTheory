@@ -1,8 +1,8 @@
-#include "../header/parser.h"
+#include "../../header/parser.h"
 
 void program(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     lexical_analyzer(file,foutput,keywords,keysymbols,token,line);
-    printf("=>%s",token->value);
+    
     block(file,foutput,keywords,keysymbols,token,line);
     
     // o '.' demarca o fim do codigo do programa

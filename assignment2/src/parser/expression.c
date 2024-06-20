@@ -1,4 +1,4 @@
-#include "../header/expression.h"
+#include "../../header/expression.h"
 
 void more_term(FILE* file,FILE* foutput,HashTable keywords,HashTable keysymbols,TokenClass* token,int* line){
     if(strcmp(token->_class,"simbolo_menos")==0){

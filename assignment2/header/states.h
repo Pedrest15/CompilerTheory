@@ -36,7 +36,7 @@ typedef enum {
     ERROR_CLOSE_COMMENT
 } State;
 
-void final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
+int final_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer,TokenClass *token);
 int error_states(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols,
                 State current_state, char symbol, char* buffer,int* line);

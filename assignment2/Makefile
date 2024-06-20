@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -o lexical_analyzer src/*.c
+	gcc -Wall -o lexical_analyzer src/*.c src/parser/*.c
 
 run:
 	./lexical_analyzer

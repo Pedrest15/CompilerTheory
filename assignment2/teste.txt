@@ -1,4 +1,4 @@
-VAR n, fat;
+VAR a,b,c
 BEGIN
     a:=2;
     IF a>2
