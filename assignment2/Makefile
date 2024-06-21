@@ -1,9 +1,9 @@
 all:
-	gcc -Wall -o lexical_analyzer src/*.c src/parser/*.c
+	gcc -Wall -o compiler src/*.c src/parser/*.c
 
 run:
-	./lexical_analyzer
+	./compiler
 
 clean:
-	rm lexical_analyzer
+	rm compiler
 

@@ -1,0 +1,3 @@
+Erro sintatico: ponto-e-virgula ';' faltando na linha 2
+Erro sintatico: 'THEN' faltando na linha 5
+Erro lexico: caracter invalido na linha  6

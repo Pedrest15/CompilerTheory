@@ -7,23 +7,39 @@
 #define TRUE 1
 #define FALSE 0
 
-int main(){
-    char filename_input[100];
+int main(int argc, char *argv[]) {
     char filename_output[10] = "saida.txt";
-    
-    // recebe do usuario o nome do arquivo com os dados de entrada
-    printf("Type the filename: ");
-    scanf("%s",filename_input);
 
-    FILE* file = open_file(filename_input,FILE_READT);
-    FILE* foutput = open_file(filename_output,FILE_WRITET);
+    // Verifica se o arquivo de entrada foi fornecido como argumento
+    if (argc < 2) {
+        printf("Usage: %s <input_file>\n", argv[0]);
+        return 1;
+    }
 
-    // inicia o analisador sintatico
-    parser(file,foutput);
+    // Obtém o nome do arquivo de entrada a partir dos argumentos da linha de comando
+    char *filename_input = argv[1];
 
-    //fecha os arquivos usados
+    // Abre o arquivo de entrada para leitura
+    FILE* file = open_file(filename_input, FILE_READT);
+    if (file == NULL) {
+        printf("Error: Could not open input file %s\n", filename_input);
+        return 1;
+    }
+
+    // Abre o arquivo de saída para escrita
+    FILE* foutput = open_file(filename_output, FILE_WRITET);
+    if (foutput == NULL) {
+        printf("Error: Could not open output file %s\n", filename_output);
+        close_file(file);
+        return 1;
+    }
+
+    // Inicia o analisador sintatico
+    parser(file, foutput);
+
+    // Fecha os arquivos usados
     close_file(file);
     close_file(foutput);
-    
+
     return 0;
 }

@@ -10,93 +10,97 @@
  * @param current_state Estado atual do AFD.
  * @param symbol Simbolo atual lido na fita de entrada.
  * @param buffer Cadeia lida ate o momento, entre o estado inicial ate chegar um estado final.
+ * @param line Linha atual do arquivo de entrada.
  * @return State Proximo estado do AFD.
  */
-State transition_rules(FILE* file, State current_state, char symbol, char* buffer,int* line){
-    switch(current_state){
+State transition_rules(FILE* file, State current_state, char symbol, char* buffer, int* line) {
+    switch (current_state) {
         case START:
             // Verifica se o simbolo e uma letra para identificar palavras-chave
-            if (isLetter(symbol)){
+            if (isLetter(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
             // Verifica se o simbolo e um sublinhado para identificar identificadores
-            } else if (isUnderScore(symbol)){
+            } else if (isUnderScore(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
 
             // Verifica se o simbolo e um simbolo chave simples
-            } else if(isSimpleKeySymbol(symbol)){
+            } else if (isSimpleKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
 
             // Verifica se o simbolo e ':', potencial inicio de ':='
-            } else if(isDoubleDotsKeySymbol(symbol)){
+            } else if (isDoubleDotsKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return DOUBLE_DOTS_KEYSYMBOL;
 
             // Verifica se o simbolo e '<', potencial inicio de '<=', '<>' ou '<'
-            } else if(isLowerKeySymbol(symbol)){
+            } else if (isLowerKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return LOWER_KEYSYMBOL;
 
             // Verifica se o simbolo e '>', potencial inicio de '>=' ou '>'
-            } else if(isBiggerKeySymbol(symbol)){
+            } else if (isBiggerKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return BIGGER_KEYSYMBOL;
 
             // Verifica se o simbolo e um digito
-            } else if(isDigit(symbol)){
+            } else if (isDigit(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return NUMBER;
 
             // Verifica se o simbolo e '{', inicio de um comentario            
-            } else if(BeginComment(symbol)){
+            } else if (BeginComment(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return COMMENT;
 
-            // caso a fita do automato inicie com espaco ou quebra de linha
-            } else if(isSpace(symbol)){
+            // Caso a fita do automato inicie com espaco ou quebra de linha
+            } else if (isSpace(symbol)) {
                 return START;
 
-            } else if(isNewLine(symbol)) {
+            // Verifica se o simbolo e uma quebra de linha
+            } else if (isNewLine(symbol)) {
                 (*line)++;
-                
-                return START;
-            // caso de EOF, ignorado pelo automato
-            } else if(symbol == EOF){
                 return START;
 
-            // fechar comentario sem ter aberto um
-            } else if (CloseComment(symbol)){
+            // Caso de EOF, ignorado pelo automato
+            } else if (symbol == EOF) {
+                return START;
+
+            // Fechar comentario sem ter aberto um
+            } else if (CloseComment(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return ERROR_CLOSE_COMMENT;
-        
-            // caracteres invalidos
+
+            // Caracteres invalidos
             } else {
                 buffer[strlen(buffer)] = symbol;
-                return INVALID_SYMBOL; // Volta ao estado inicial após o erro
+                return INVALID_SYMBOL; // Volta ao estado inicial apos o erro
             }
             break;
 
         case KEYWORD:
-            // enquanto forem letras, pode ser uma palavra reservada
-            if (isLetter(symbol)){
+            // Enquanto forem letras, pode ser uma palavra reservada
+            if (isLetter(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return KEYWORD;
 
-            // se houver digito ou _, entao eh um identificador
-            } else if (isDigit(symbol) || isUnderScore(symbol)){
+            // Se houver digito ou _, entao e um identificador
+            } else if (isDigit(symbol) || isUnderScore(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
-            
-            } else if (isSeparator(symbol)){
+
+            // Verifica se o simbolo e um separador
+            } else if (isSeparator(symbol)) {
                 return DONE_KEYWORD;
 
-            } else if(isNewLine(symbol)){    
-
+            // Verifica se o simbolo e uma quebra de linha
+            } else if (isNewLine(symbol)) {
                 return DONE_KEYWORD;
-            //caracter invalido no nome
+
+            // Caracter invalido no nome
             } else {
                 buffer[strlen(buffer)] = symbol;
                 return INVALID_SYMBOL;
@@ -104,61 +108,66 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             break;
 
         case DOUBLE_DOTS_KEYSYMBOL:
-            // buffer fica com simbolo ':='
-            if (isEqualKeySymbol(symbol)){
+            // Buffer fica com simbolo ':='
+            if (isEqualKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
-                
-            // faltando '='
+
+            // Faltando '='
             } else {
                 return ERROR_DOUBLE_DOTS;
             }
             break;
 
         case LOWER_KEYSYMBOL:
-            // buffer fica com simbolo '<='
-            if (isEqualKeySymbol(symbol)){
+            // Buffer fica com simbolo '<='
+            if (isEqualKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
-            
-            // buffer fica com simbolo '<>'
-            } else if (isBiggerKeySymbol(symbol)){
+
+            // Buffer fica com simbolo '<>'
+            } else if (isBiggerKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
-                return DONE_KEYSYMBOL;    
-            
+                return DONE_KEYSYMBOL;
+
+            // Simbolo menor
             } else {
                 return DONE_BACK_KEYSYMBOL;
             }
             break;
 
         case BIGGER_KEYSYMBOL:
-            // buffer fica com simbolo '>='
-            if (isEqualKeySymbol(symbol)){
+            // Buffer fica com simbolo '>='
+            if (isEqualKeySymbol(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return DONE_KEYSYMBOL;
-                
-            //buffer apenas com '>'
+
+            // Buffer apenas com '>'
             } else {
                 return DONE_BACK_KEYSYMBOL;
             }
             break;
 
         case IDENTIFIER:
-            if (isLetter(symbol)){
+            // Continua construindo o identificador se o simbolo for uma letra
+            if (isLetter(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
 
-            } else if (isDigit(symbol) || isUnderScore(symbol)){
+            // Continua construindo o identificador se o simbolo for um digito ou sublinhado
+            } else if (isDigit(symbol) || isUnderScore(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return IDENTIFIER;
-            
-            } else if (isSeparator(symbol)){
+
+            // Verifica se o simbolo e um separador
+            } else if (isSeparator(symbol)) {
                 return DONE_IDENTIFIER;
 
-            } else if(isNewLine(symbol)){    
-
+            // Verifica se o simbolo e uma quebra de linha
+            } else if (isNewLine(symbol)) {
                 return DONE_IDENTIFIER;
-            //carcter invalido no nome
+
+            // Caracter invalido no nome
             } else {
                 buffer[strlen(buffer)] = symbol;
                 return INVALID_SYMBOL;
@@ -166,22 +175,25 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             break;
 
         case NUMBER:
-            //numero seguido por letra
-            if (isLetter(symbol)){
+            // Numero seguido por letra, erro
+            if (isLetter(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return ERROR_NUMBER_LETTER;
 
-            } else if (isDigit(symbol)){
+            // Continua construindo o numero se o simbolo for um digito
+            } else if (isDigit(symbol)) {
                 buffer[strlen(buffer)] = symbol;
                 return NUMBER;
-            
-            } else if (isSeparator(symbol)){
+
+            // Verifica se o simbolo e um separador
+            } else if (isSeparator(symbol)) {
                 return DONE_NUMBER;
 
-            } else if(isNewLine(symbol)){    
-
+            // Verifica se o simbolo e uma quebra de linha
+            } else if (isNewLine(symbol)) {
                 return DONE_NUMBER;
-            //caracter invalido no numero
+
+            // Caracter invalido no numero
             } else {
                 buffer[strlen(buffer)] = symbol;
                 return ERROR_INVALID_NUMBER;
@@ -189,30 +201,37 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
             break;
 
         case COMMENT:
-            if (CloseComment(symbol)){
+            // Fecha comentario
+            if (CloseComment(symbol)) {
                 (*line)++;
-
                 return DONE_COMMENT;
-            } else if (isNewLine(symbol)){
-                (*line)++;
 
+            // Verifica se o simbolo e uma quebra de linha dentro do comentario
+            } else if (isNewLine(symbol)) {
+                (*line)++;
                 return ERROR_COMMENT;
+
+            // Continua no comentario
             } else {
                 return COMMENT;
             }
             break;
 
         case INVALID_SYMBOL:
-            if (isSeparator(symbol)){
-
+            // Verifica se o simbolo e um separador
+            if (isSeparator(symbol)) {
                 return ERROR_INVALID_SYMBOL;
-            } else if(isNewLine(symbol)){    
 
+            // Verifica se o simbolo e uma quebra de linha
+            } else if (isNewLine(symbol)) {
                 return ERROR_INVALID_SYMBOL;
+
+            // Continua com simbolo invalido
             } else {
                 buffer[strlen(buffer)] = symbol;
                 return INVALID_SYMBOL;
             }
+            break;
 
         default:
             break;
@@ -228,28 +247,32 @@ State transition_rules(FILE* file, State current_state, char symbol, char* buffe
  * @param foutput Arquivo de saida onde os tokens e suas classes serao registrados.
  * @param keywords Tabela hash contendo as palavras-chave da linguagem.
  * @param keysymbols Tabela hash contendo os simbolos da linguagem.
+ * @param token Estrutura que armazena o token atual e sua classe.
+ * @param line Ponteiro para a linha atual do arquivo de entrada.
  * @return int Retorna o ultimo caractere lido do arquivo de entrada.
  */
-int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass *token,int* line){
+int lexical_analyzer(FILE* file, FILE* foutput, HashTable keywords, HashTable keysymbols, TokenClass *token, int* line) {
     State current_state = START;
     char symbol;
     char buffer[100] = "";
     strcpy(token->value, "");
     strcpy(token->_class, "");
-    
+
     while (1) {
         symbol = fgetc(file);
         
-        current_state = transition_rules(file, current_state,symbol,buffer,line);
+        current_state = transition_rules(file, current_state, symbol, buffer, line);
 
-        final_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,token);       
-        if(strcmp(token->_class,"")!=0){
+        // Processa estados finais
+        final_states(file, foutput, keywords, keysymbols, current_state, symbol, buffer, token);       
+        if (strcmp(token->_class, "") != 0) {
             break;
-        } 
-        
-        error_states(file,foutput,keywords,keysymbols,current_state,symbol,buffer,line);
+        }
+
+        // Processa estados de erro
+        error_states(file, foutput, keywords, keysymbols, current_state, symbol, buffer, line);
     
-        if (symbol == EOF){
+        if (symbol == EOF) {
             break;
         }
     }
